@@ -1,0 +1,15 @@
+environments:
+  dev:
+    host: "localhost"
+    port: 9000
+    bucket: "dev-bucket"
+    accessKey: "dev-access-key"
+    secretKey: "dev-secret-key"
+    location: "us-east-1"
+  prod:
+    host: "s3.example.com"
+    port: 443
+    bucket: "prod-bucket"
+    accessKey: "prod-access-key"
+    secretKey: "prod-secret-key"
+    location: "eu-central-1"
