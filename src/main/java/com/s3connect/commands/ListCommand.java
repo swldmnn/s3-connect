@@ -3,15 +3,12 @@ package com.s3connect.commands;
 import picocli.CommandLine;
 import com.s3connect.config.ConfigLoader;
 import com.s3connect.config.ConfigLoader.EnvironmentConfig;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
+import com.s3connect.util.S3ClientFactory;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
-import java.net.URI;
 import java.util.List;
 
 @CommandLine.Command(
@@ -40,13 +37,7 @@ public class ListCommand implements Runnable {
                 return;
             }
 
-            S3Client s3Client = S3Client.builder()
-                    .endpointOverride(URI.create(config.getHost()))
-                    .region(Region.of(config.getLocation()))
-                    .credentialsProvider(StaticCredentialsProvider.create(
-                            AwsBasicCredentials.create(config.getAccessKey(), config.getSecretKey())
-                    ))
-                    .build();
+            S3Client s3Client = S3ClientFactory.createS3Client(config);
 
             ListObjectsV2Request request = ListObjectsV2Request.builder()
                     .bucket(config.getBucket())

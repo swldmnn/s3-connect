@@ -2,13 +2,14 @@ package com.s3connect;
 
 import picocli.CommandLine;
 import com.s3connect.commands.ListCommand;
+import com.s3connect.commands.MultipartUploadCommand;
 
 @CommandLine.Command(
         name = "s3connect",
         mixinStandardHelpOptions = true,
         version = "1.0.0",
         description = "CLI tool to interact with S3-compatible servers.",
-        subcommands = {ListCommand.class}
+        subcommands = {ListCommand.class, MultipartUploadCommand.class}
 )
 public class S3ConnectCLI implements Runnable {
 
