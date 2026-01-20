@@ -1,11 +1,12 @@
 # s3-connect
 
-`s3-connect` is a simple CLI tool designed to interact with S3-compatible servers. It allows users to test connections, list objects in buckets, upload files, and perform other operations using a straightforward command-line interface.
+`s3-connect` is a simple CLI tool designed to interact with S3-compatible servers. It allows users to test connections, list objects in buckets, upload files, delete objects, and perform other operations using a straightforward command-line interface.
 
 ## Features
 - List objects in a specified S3 bucket.
 - Filter objects by prefix.
 - Perform multipart uploads to S3 buckets.
+- Delete objects from S3 buckets.
 - Support for multiple environments via configuration.
 - Verbose mode for detailed output.
 
@@ -71,4 +72,18 @@ Upload a file to a specified bucket using multipart upload:
 Example:
 ```bash
 ./gradlew run --args="multipart-upload -e dev -f /path/to/file -k my-object-key -v"
+```
+
+#### Delete Object
+Delete an object from a specified bucket:
+```bash
+./gradlew run --args="delete -e <environment> -k <object-key> [-v]"
+```
+- `-e, --environment` (required): Specify the environment to use.
+- `-k, --key` (required): Key of the object to delete.
+- `-v, --verbose` (optional): Enable verbose output.
+
+Example:
+```bash
+./gradlew run --args="delete -e dev -k my-object-key -v"
 ```
