@@ -6,12 +6,16 @@ import com.s3connect.config.ConfigLoader.EnvironmentConfig;
 import com.s3connect.util.S3ClientFactory;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @CommandLine.Command(
         name = "delete",
         description = "Delete an object from the specified bucket."
 )
 public class DeleteCommand implements Runnable {
+
+    private static final Logger logger = LoggerFactory.getLogger(DeleteCommand.class);
 
     @CommandLine.Option(names = {"-e", "--environment"}, description = "Specify the environment to use.", required = true)
     private String environment;
@@ -29,7 +33,7 @@ public class DeleteCommand implements Runnable {
             EnvironmentConfig config = configLoader.getEnvironmentConfig(environment);
 
             if (config == null) {
-                System.err.println("Environment not found: " + environment);
+                logger.error("Environment not found: {}", environment);
                 return;
             }
 
@@ -40,12 +44,9 @@ public class DeleteCommand implements Runnable {
                     .key(objectKey)
                     .build());
 
-            System.out.println("Object deleted successfully: " + objectKey);
+            logger.info("Object deleted successfully: {}", objectKey);
         } catch (Exception e) {
-            System.err.println("Error deleting object: " + e.getMessage());
-            if (verbose) {
-                e.printStackTrace();
-            }
+            logger.error("Error deleting object: {}", e.getMessage(), e);
         }
     }
 }

@@ -12,6 +12,9 @@ import software.amazon.awssdk.services.s3.model.CreateMultipartUploadRequest;
 import software.amazon.awssdk.services.s3.model.UploadPartRequest;
 import software.amazon.awssdk.services.s3.model.UploadPartResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,6 +28,8 @@ import java.util.List;
         description = "Perform a multipart upload to the specified bucket."
 )
 public class MultipartUploadCommand implements Runnable {
+
+    private static final Logger logger = LoggerFactory.getLogger(MultipartUploadCommand.class);
 
     @CommandLine.Option(names = {"-e", "--environment"}, description = "Specify the environment to use.", required = true)
     private String environment;
@@ -45,13 +50,13 @@ public class MultipartUploadCommand implements Runnable {
             EnvironmentConfig config = configLoader.getEnvironmentConfig(environment);
 
             if (config == null) {
-                System.err.println("Environment not found: " + environment);
+                logger.error("Environment not found: {}", environment);
                 return;
             }
 
             File file = new File(filePath);
             if (!file.exists() || !file.isFile()) {
-                System.err.println("File not found: " + filePath);
+                logger.error("File not found: {}", filePath);
                 return;
             }
 
@@ -109,17 +114,11 @@ public class MultipartUploadCommand implements Runnable {
                             .build())
                     .build());
 
-            System.out.println("Multipart upload completed successfully.");
+            logger.info("Multipart upload completed successfully.");
         } catch (IOException e) {
-            System.err.println("Error reading file: " + e.getMessage());
-            if (verbose) {
-                e.printStackTrace();
-            }
+            logger.error("Error reading file: {}", e.getMessage(), e);
         } catch (Exception e) {
-            System.err.println("Error during multipart upload: " + e.getMessage());
-            if (verbose) {
-                e.printStackTrace();
-            }
+            logger.error("Error during multipart upload: {}", e.getMessage(), e);
         }
     }
 }

@@ -4,6 +4,8 @@ import picocli.CommandLine;
 import com.s3connect.commands.ListCommand;
 import com.s3connect.commands.MultipartUploadCommand;
 import com.s3connect.commands.DeleteCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @CommandLine.Command(
         name = "s3connect",
@@ -14,15 +16,17 @@ import com.s3connect.commands.DeleteCommand;
 )
 public class S3ConnectCLI implements Runnable {
 
+    private static final Logger logger = LoggerFactory.getLogger(S3ConnectCLI.class);
+
     @CommandLine.Option(names = {"-v", "--verbose"}, description = "Enable verbose output.")
     private boolean verbose;
 
     @Override
     public void run() {
         if (verbose) {
-            System.out.println("Verbose mode enabled.");
+            logger.info("Verbose mode enabled.");
         } else {
-            System.out.println("Basic mode enabled.");
+            logger.info("Basic mode enabled.");
         }
     }
 

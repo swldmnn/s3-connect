@@ -9,6 +9,9 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 @CommandLine.Command(
@@ -16,6 +19,8 @@ import java.util.List;
         description = "List objects in the specified bucket."
 )
 public class ListCommand implements Runnable {
+
+    private static final Logger logger = LoggerFactory.getLogger(ListCommand.class);
 
     @CommandLine.Option(names = {"-p", "--prefix"}, description = "Filter objects by prefix.")
     private String prefix;
@@ -33,7 +38,7 @@ public class ListCommand implements Runnable {
             EnvironmentConfig config = configLoader.getEnvironmentConfig(environment);
 
             if (config == null) {
-                System.err.println("Environment not found: " + environment);
+                logger.error("Environment not found: {}", environment);
                 return;
             }
 
@@ -48,17 +53,14 @@ public class ListCommand implements Runnable {
             List<S3Object> objects = response.contents();
 
             if (objects.isEmpty()) {
-                System.out.println("No objects found.");
+                logger.info("No objects found.");
             } else {
                 for (S3Object object : objects) {
-                    System.out.println("- " + object.key() + " (" + object.size() + " bytes)");
+                    logger.info("- {} ({} bytes)", object.key(), object.size());
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error listing objects: " + e.getMessage());
-            if (verbose) {
-                e.printStackTrace();
-            }
+            logger.error("Error listing objects: {}", e.getMessage(), e);
         }
     }
 }
