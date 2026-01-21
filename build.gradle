@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     implementation 'software.amazon.awssdk:s3:2.20.0' 
-    implementation 'info.picocli:picocli:4.7.0' 
+    implementation 'info.picocli:picocli:4.7.4' 
     implementation 'org.slf4j:slf4j-api:2.0.9' 
     implementation 'ch.qos.logback:logback-classic:1.4.11' 
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2' 
