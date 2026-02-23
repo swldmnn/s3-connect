@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
         mixinStandardHelpOptions = true,
         version = "1.0.0",
         description = "CLI tool to interact with S3-compatible servers.",
-        subcommands = {ListCommand.class, MultipartUploadCommand.class, DeleteCommand.class}
+        subcommands = {ListCommand.class, MultipartUploadCommand.class, DeleteCommand.class, DownloadCommand.class}
 )
 public class S3ConnectCLI implements Runnable {
 
