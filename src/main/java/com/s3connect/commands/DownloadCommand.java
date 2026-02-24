@@ -23,11 +23,8 @@ public class DownloadCommand implements Runnable {
     @CommandLine.Option(names = {"-e", "--environment"}, description = "Specify the environment to use.", required = true)
     private String environment;
 
-    @CommandLine.Option(names = {"-f", "--file"}, description = "Key of the object to download.", required = true)
-    private String fileKey;
-
-    @CommandLine.Option(names = {"-v", "--verbose"}, description = "Enable verbose output.")
-    private boolean verbose;
+    @CommandLine.Option(names = {"-o", "--object"}, description = "Key of the object to download.", required = true)
+    private String objectKey;
 
     @Override
     public void run() {
@@ -42,18 +39,18 @@ public class DownloadCommand implements Runnable {
 
             S3Client s3Client = S3ClientFactory.createS3Client(config);
 
-            String fileName = Paths.get(fileKey).getFileName().toString();
+            String fileName = Paths.get(objectKey).getFileName().toString();
             Path destination = Paths.get(fileName);
 
             s3Client.getObject(
                     GetObjectRequest.builder()
                             .bucket(config.getBucket())
-                            .key(fileKey)
+                            .key(objectKey)
                             .build(),
                     destination
             );
 
-            logger.info("Object downloaded successfully: {} -> {}", fileKey, destination.toAbsolutePath());
+            logger.info("Object downloaded successfully: {} -> {}", objectKey, destination.toAbsolutePath());
         } catch (Exception e) {
             logger.error("Error downloading object: {}", e.getMessage(), e);
         }

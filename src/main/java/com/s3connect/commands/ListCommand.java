@@ -28,9 +28,6 @@ public class ListCommand implements Runnable {
     @CommandLine.Option(names = {"-e", "--environment"}, description = "Specify the environment to use.", required = true)
     private String environment;
 
-    @CommandLine.Option(names = {"-v", "--verbose"}, description = "Enable verbose output.")
-    private boolean verbose;
-
     @Override
     public void run() {
         try {

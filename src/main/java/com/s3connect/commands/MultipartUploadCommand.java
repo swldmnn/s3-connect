@@ -40,9 +40,6 @@ public class MultipartUploadCommand implements Runnable {
     @CommandLine.Option(names = {"-k", "--key"}, description = "Key for the uploaded object.")
     private String objectKey;
 
-    @CommandLine.Option(names = {"-v", "--verbose"}, description = "Enable verbose output.")
-    private boolean verbose;
-
     @Override
     public void run() {
         try {

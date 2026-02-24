@@ -23,9 +23,6 @@ public class DeleteCommand implements Runnable {
     @CommandLine.Option(names = {"-k", "--key"}, description = "Key of the object to delete.", required = true)
     private String objectKey;
 
-    @CommandLine.Option(names = {"-v", "--verbose"}, description = "Enable verbose output.")
-    private boolean verbose;
-
     @Override
     public void run() {
         try {

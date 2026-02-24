@@ -5,7 +5,9 @@ import com.s3connect.commands.ListCommand;
 import com.s3connect.commands.MultipartUploadCommand;
 import com.s3connect.commands.DeleteCommand;
 import com.s3connect.commands.DownloadCommand;
-import org.slf4j.Logger;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
 
 @CommandLine.Command(
@@ -13,26 +15,37 @@ import org.slf4j.LoggerFactory;
         mixinStandardHelpOptions = true,
         version = "1.0.0",
         description = "CLI tool to interact with S3-compatible servers.",
-        subcommands = {ListCommand.class, MultipartUploadCommand.class, DeleteCommand.class, DownloadCommand.class}
+        subcommands = {
+            ListCommand.class,
+            MultipartUploadCommand.class,
+            DeleteCommand.class,
+            DownloadCommand.class
+        }
 )
 public class S3ConnectCLI implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(S3ConnectCLI.class);
-
-    @CommandLine.Option(names = {"-v", "--verbose"}, description = "Enable verbose output.")
-    private boolean verbose;
+    @CommandLine.Option(names = {"-v", "--verbose"}, description = "Enable verbose output.", scope = CommandLine.ScopeType.INHERIT)
+    boolean verbose;
 
     @Override
     public void run() {
-        if (verbose) {
-            logger.info("Verbose mode enabled.");
-        } else {
-            logger.info("Basic mode enabled.");
-        }
+        new CommandLine(this).usage(System.out);
+    }
+
+    static void configureLogging(boolean verbose) {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        Logger rootLogger = loggerContext.getLogger("ROOT");
+        rootLogger.setLevel(verbose ? Level.DEBUG : Level.INFO);
     }
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new S3ConnectCLI()).execute(args);
+        S3ConnectCLI cli = new S3ConnectCLI();
+        int exitCode = new CommandLine(cli)
+                .setExecutionStrategy(parseResult -> {
+                    configureLogging(cli.verbose);
+                    return new CommandLine.RunLast().execute(parseResult);
+                })
+                .execute(args);
         System.exit(exitCode);
     }
 }
