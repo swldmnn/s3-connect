@@ -1,6 +1,7 @@
 package com.s3connect.commands;
 
 import picocli.CommandLine;
+import com.s3connect.S3ConnectCLI;
 import com.s3connect.config.ConfigLoader;
 import com.s3connect.config.ConfigLoader.EnvironmentConfig;
 import com.s3connect.util.S3ClientFactory;
@@ -22,20 +23,20 @@ public class ListCommand implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(ListCommand.class);
 
+    @CommandLine.ParentCommand
+    private S3ConnectCLI parent;
+
     @CommandLine.Option(names = {"-p", "--prefix"}, description = "Filter objects by prefix.")
     private String prefix;
-
-    @CommandLine.Option(names = {"-e", "--environment"}, description = "Specify the environment to use.", required = true)
-    private String environment;
 
     @Override
     public void run() {
         try {
             ConfigLoader configLoader = new ConfigLoader("src/main/resources/config.yaml");
-            EnvironmentConfig config = configLoader.getEnvironmentConfig(environment);
+            EnvironmentConfig config = configLoader.getEnvironmentConfig(parent.environment);
 
             if (config == null) {
-                logger.error("Environment not found: {}", environment);
+                logger.error("Environment not found: {}", parent.environment);
                 return;
             }
 

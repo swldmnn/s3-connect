@@ -25,7 +25,10 @@ import org.slf4j.LoggerFactory;
 public class S3ConnectCLI implements Runnable {
 
     @CommandLine.Option(names = {"-v", "--verbose"}, description = "Enable verbose output.", scope = CommandLine.ScopeType.INHERIT)
-    boolean verbose;
+    public boolean verbose;
+
+    @CommandLine.Option(names = {"-e", "--environment"}, description = "Specify the environment to use.", required = true, scope = CommandLine.ScopeType.INHERIT)
+    public String environment;
 
     @Override
     public void run() {
