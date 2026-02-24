@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BINARY="$SCRIPT_DIR/build/install/s3-connect/bin/s3-connect"
+
+needs_rebuild() {
+    [ ! -f "$BINARY" ] && return 0
+    find "$SCRIPT_DIR/src" "$SCRIPT_DIR/build.gradle" -newer "$BINARY" -print -quit 2>/dev/null | grep -q .
+}
+
+if needs_rebuild; then
+    echo "Building..." >&2
+    "$SCRIPT_DIR/gradlew" installDist -q
+fi
+
+exec "$BINARY" "$@"
