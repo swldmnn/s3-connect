@@ -2,7 +2,6 @@ package com.s3connect.commands;
 
 import picocli.CommandLine;
 import com.s3connect.S3ConnectCLI;
-import com.s3connect.config.ConfigLoader;
 import com.s3connect.config.ConfigLoader.EnvironmentConfig;
 import com.s3connect.util.S3ClientFactory;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -26,19 +25,13 @@ public class ListCommand implements Runnable {
     @CommandLine.ParentCommand
     private S3ConnectCLI parent;
 
-    @CommandLine.Option(names = {"-p", "--prefix"}, description = "Filter objects by prefix.")
+    @CommandLine.Option(names = {"--prefix"}, description = "Filter objects by prefix.")
     private String prefix;
 
     @Override
     public void run() {
         try {
-            ConfigLoader configLoader = new ConfigLoader("src/main/resources/config.yaml");
-            EnvironmentConfig config = configLoader.getEnvironmentConfig(parent.environment);
-
-            if (config == null) {
-                logger.error("Environment not found: {}", parent.environment);
-                return;
-            }
+            EnvironmentConfig config = parent.resolveConfig();
 
             S3Client s3Client = S3ClientFactory.createS3Client(config);
 
