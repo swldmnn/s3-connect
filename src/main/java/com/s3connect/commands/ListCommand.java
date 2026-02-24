@@ -22,6 +22,9 @@ public class ListCommand implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(ListCommand.class);
 
+    @CommandLine.Spec
+    private CommandLine.Model.CommandSpec spec;
+
     @CommandLine.ParentCommand
     private S3ConnectCLI parent;
 
@@ -30,15 +33,21 @@ public class ListCommand implements Runnable {
 
     @Override
     public void run() {
+        if (parent.environment == null && parent.host == null) {
+            spec.commandLine().usage(System.out);
+            return;
+        }
         try {
             EnvironmentConfig config = parent.resolveConfig();
 
             S3Client s3Client = S3ClientFactory.createS3Client(config);
 
-            ListObjectsV2Request request = ListObjectsV2Request.builder()
-                    .bucket(config.getBucket())
-                    .prefix(prefix)
-                    .build();
+            ListObjectsV2Request.Builder requestBuilder = ListObjectsV2Request.builder()
+                    .bucket(config.getBucket());
+            if (prefix != null) {
+                requestBuilder.prefix(prefix);
+            }
+            ListObjectsV2Request request = requestBuilder.build();
 
             ListObjectsV2Response response = s3Client.listObjectsV2(request);
             List<S3Object> objects = response.contents();

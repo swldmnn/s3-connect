@@ -74,6 +74,12 @@ public class S3ConnectCLI implements Runnable {
         if (accessKey != null) config.setAccessKey(accessKey);
         if (secretKey != null) config.setSecretKey(secretKey);
 
+        if (config.getHost() == null) throw new IllegalStateException("Missing required parameter: host (-h) or environment (-e)");
+        if (config.getBucket() == null) throw new IllegalStateException("Missing required parameter: bucket (-b) or environment (-e)");
+        if (config.getLocation() == null) throw new IllegalStateException("Missing required parameter: location (-l) or environment (-e)");
+        if (config.getAccessKey() == null) throw new IllegalStateException("Missing required parameter: access-key (-a) or environment (-e)");
+        if (config.getSecretKey() == null) throw new IllegalStateException("Missing required parameter: secret-key (-s) or environment (-e)");
+
         return config;
     }
 
