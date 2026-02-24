@@ -4,6 +4,7 @@ import picocli.CommandLine;
 import com.s3connect.commands.ListCommand;
 import com.s3connect.commands.MultipartUploadCommand;
 import com.s3connect.commands.DeleteCommand;
+import com.s3connect.commands.DownloadCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
