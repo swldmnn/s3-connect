@@ -1,22 +1,28 @@
 # s3-connect
 
-`s3-connect` is a simple CLI tool designed to interact with S3-compatible servers. It allows users to test connections, list objects in buckets, upload files, delete objects, and perform other operations using a straightforward command-line interface.
+`s3-connect` is a simple CLI tool designed to interact with S3-compatible servers. It allows users to list objects in buckets, upload files, download objects, delete objects, and perform other operations using a straightforward command-line interface.
 
 ## Features
 - List objects in a specified S3 bucket.
 - Filter objects by prefix.
 - Perform multipart uploads to S3 buckets.
+- Download objects from S3 buckets.
 - Delete objects from S3 buckets.
-- Support for multiple environments via configuration.
-- Verbose mode for detailed output.
+- Support for multiple environments via configuration file.
+- Per-parameter overrides for host, port, bucket, location, access key, and secret key.
+- Verbose mode for detailed debug output.
 
 ## Prerequisites
 - Java 21 or higher installed.
 - Gradle installed (or use the provided Gradle wrapper).
-- A valid `config.yaml` file in the `src/main/resources/` directory with environment configurations.
 
 ## Configuration
-The `config.yaml` file should define environments and their respective S3 connection details. Example:
+
+Connection details can be provided via a `config.yaml` file, CLI parameters, or a combination of both. CLI parameters always override values from the config file.
+
+### config.yaml
+
+Place `config.yaml` in `src/main/resources/`. Example:
 
 ```yaml
 environments:
@@ -29,61 +35,88 @@ environments:
     location: "us-east-1"
 ```
 
-## Usage
+## Running the CLI
 
-### Build the Project
-To build the project, run:
+### Convenience script (recommended)
+Build and run using the wrapper script in the project root:
 ```bash
-./gradlew clean build
+./s3-connect <command> [options]
 ```
+The script builds automatically on first run and when source files change.
 
-### Run the CLI
-To run the CLI, use:
+### Gradle
 ```bash
 ./gradlew run --args="<command> [options]"
 ```
 
-### Commands
+## Global Options
 
-#### List Objects
-List objects in a specified bucket:
-```bash
-./gradlew run --args="list -e <environment> [-p <prefix>] [-v]"
-```
-- `-e, --environment` (required): Specify the environment to use.
-- `-p, --prefix` (optional): Filter objects by prefix.
-- `-v, --verbose` (optional): Enable verbose output.
+These options apply to all commands and can be placed before or after the subcommand name.
 
-Example:
+| Option | Description |
+|---|---|
+| `-e, --environment` | Load connection details from a named environment in `config.yaml`. |
+| `-h, --host` | Override host. |
+| `-p, --port` | Override port. |
+| `-b, --bucket` | Override bucket. |
+| `-l, --location` | Override location/region. |
+| `-a, --access-key` | Override access key. |
+| `-s, --secret-key` | Override secret key. |
+| `-v, --verbose` | Enable verbose debug output. |
+
+## Commands
+
+### list
+List objects in the configured bucket:
 ```bash
-./gradlew run --args="list -e dev -p logs/ -v"
+./s3-connect list -e <environment> [--prefix <prefix>]
+```
+- `--prefix` (optional): Filter objects by prefix.
+
+Examples:
+```bash
+./s3-connect list -e dev
+./s3-connect list -e dev --prefix logs/
+./s3-connect list -e dev --prefix logs/ -v
+./s3-connect list -h https://s3.example.com -b my-bucket -l us-east-1 -a key -s secret
 ```
 
-#### Multipart Upload
-Upload a file to a specified bucket using multipart upload:
+### multipart-upload
+Upload a file using multipart upload:
 ```bash
-./gradlew run --args="multipart-upload -e <environment> -f <file-path> [-k <object-key>] [-v]"
+./s3-connect multipart-upload -e <environment> -f <file-path> [-k <object-key>]
 ```
-- `-e, --environment` (required): Specify the environment to use.
-- `-f, --file` (required): Path to the file to upload.
-- `-k, --key` (optional): Key for the uploaded object. Defaults to the filename if not provided.
-- `-v, --verbose` (optional): Enable verbose output.
+- `-f, --file` (required): Path to the local file to upload.
+- `-k, --key` (optional): Object key in the bucket. Defaults to the filename.
 
-Example:
+Examples:
 ```bash
-./gradlew run --args="multipart-upload -e dev -f /path/to/file -k my-object-key -v"
+./s3-connect multipart-upload -e dev -f /path/to/file.tar.gz
+./s3-connect multipart-upload -e dev -f /path/to/file.tar.gz -k backups/file.tar.gz
 ```
 
-#### Delete Object
-Delete an object from a specified bucket:
+### download
+Download an object from the bucket to the current directory:
 ```bash
-./gradlew run --args="delete -e <environment> -k <object-key> [-v]"
+./s3-connect download -e <environment> -o <object-key>
 ```
-- `-e, --environment` (required): Specify the environment to use.
+- `-o, --object` (required): Key of the object to download.
+
+Examples:
+```bash
+./s3-connect download -e dev -o backups/file.tar.gz
+./s3-connect download -e dev -o path/to/file.txt -b other-bucket
+```
+
+### delete
+Delete an object from the bucket:
+```bash
+./s3-connect delete -e <environment> -k <object-key>
+```
 - `-k, --key` (required): Key of the object to delete.
-- `-v, --verbose` (optional): Enable verbose output.
 
-Example:
+Examples:
 ```bash
-./gradlew run --args="delete -e dev -k my-object-key -v"
+./s3-connect delete -e dev -k my-object-key
+./s3-connect delete -e dev -k path/to/old-file.txt -v
 ```
