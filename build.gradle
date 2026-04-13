@@ -21,7 +21,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'software.amazon.awssdk:s3:2.42.33' 
+    implementation 'software.amazon.awssdk:s3:2.42.30'
+    implementation 'software.amazon.awssdk:http-auth-aws:2.42.30'
+    implementation 'software.amazon.awssdk:url-connection-client:2.42.30'
     implementation 'info.picocli:picocli:4.7.4' 
     implementation 'org.slf4j:slf4j-api:2.0.9' 
     implementation 'ch.qos.logback:logback-classic:1.4.11' 
