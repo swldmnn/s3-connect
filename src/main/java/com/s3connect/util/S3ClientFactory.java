@@ -16,14 +16,19 @@ import java.net.URI;
 
 public class S3ClientFactory {
 
-    public static S3Client createS3Client(EnvironmentConfig config) {
-        final AttributeMap attributeMap = AttributeMap.builder()
-                .put(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES, true)
-                .build();
+    public static S3Client createS3Client(EnvironmentConfig config, boolean trustAllCerts) {
+        UrlConnectionHttpClient.Builder httpClientBuilder = UrlConnectionHttpClient.builder();
 
-        SdkHttpClient httpClient = UrlConnectionHttpClient.builder()
-                .buildWithDefaults(attributeMap);
-                
+        SdkHttpClient httpClient;
+        if (trustAllCerts) {
+            AttributeMap attributeMap = AttributeMap.builder()
+                    .put(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES, true)
+                    .build();
+            httpClient = httpClientBuilder.buildWithDefaults(attributeMap);
+        } else {
+            httpClient = httpClientBuilder.build();
+        }
+
         return S3Client.builder()
                 .endpointOverride(URI.create(config.getHost()))
                 .region(Region.of(config.getLocation()))

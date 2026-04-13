@@ -54,7 +54,7 @@ public class MultipartUploadCommand implements Runnable {
             // Use the filename as the object key if not provided
             String key = (objectKey != null && !objectKey.isEmpty()) ? objectKey : file.getName();
 
-            S3Client s3Client = S3ClientFactory.createS3Client(config);
+            S3Client s3Client = S3ClientFactory.createS3Client(config, parent.trustAllCerts);
 
             long partSize = 5 * 1024 * 1024; // 5 MB
             List<CompletedPart> completedParts = new ArrayList<>();

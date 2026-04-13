@@ -28,7 +28,7 @@ public class DeleteCommand implements Runnable {
         try {
             EnvironmentConfig config = parent.resolveConfig();
 
-            S3Client s3Client = S3ClientFactory.createS3Client(config);
+            S3Client s3Client = S3ClientFactory.createS3Client(config, parent.trustAllCerts);
 
             s3Client.deleteObject(DeleteObjectRequest.builder()
                     .bucket(config.getBucket())

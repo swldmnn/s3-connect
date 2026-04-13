@@ -31,7 +31,7 @@ public class DownloadCommand implements Runnable {
         try {
             EnvironmentConfig config = parent.resolveConfig();
 
-            S3Client s3Client = S3ClientFactory.createS3Client(config);
+            S3Client s3Client = S3ClientFactory.createS3Client(config, parent.trustAllCerts);
 
             String fileName = Paths.get(objectKey).getFileName().toString();
             Path destination = Paths.get(fileName);

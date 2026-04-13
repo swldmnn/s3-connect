@@ -50,6 +50,9 @@ public class S3ConnectCLI implements Runnable {
     @CommandLine.Option(names = {"-s", "--secret-key"}, description = "Override secret key.", scope = CommandLine.ScopeType.INHERIT)
     public String secretKey;
 
+    @CommandLine.Option(names = {"-t", "--trust-all-certs"}, description = "Disable SSL certificate validation.", scope = CommandLine.ScopeType.INHERIT)
+    public boolean trustAllCerts;
+
     public EnvironmentConfig resolveConfig() throws Exception {
         EnvironmentConfig config = new EnvironmentConfig();
 
