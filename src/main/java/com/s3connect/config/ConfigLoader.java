@@ -35,7 +35,6 @@ public class ConfigLoader {
 
     public static class EnvironmentConfig {
         private String host;
-        private int port;
         private String bucket;
         private String accessKey;
         private String secretKey;
@@ -47,14 +46,6 @@ public class ConfigLoader {
 
         public void setHost(String host) {
             this.host = host;
-        }
-
-        public int getPort() {
-            return port;
-        }
-
-        public void setPort(int port) {
-            this.port = port;
         }
 
         public String getBucket() {

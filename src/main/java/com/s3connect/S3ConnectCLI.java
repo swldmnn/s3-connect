@@ -35,9 +35,6 @@ public class S3ConnectCLI implements Runnable {
     @CommandLine.Option(names = {"-h", "--host"}, description = "Override host.", scope = CommandLine.ScopeType.INHERIT)
     public String host;
 
-    @CommandLine.Option(names = {"-p", "--port"}, description = "Override port.", scope = CommandLine.ScopeType.INHERIT)
-    public Integer port;
-
     @CommandLine.Option(names = {"-b", "--bucket"}, description = "Override bucket.", scope = CommandLine.ScopeType.INHERIT)
     public String bucket;
 
@@ -63,7 +60,6 @@ public class S3ConnectCLI implements Runnable {
                 throw new IllegalArgumentException("Environment not found: " + environment);
             }
             config.setHost(envConfig.getHost());
-            config.setPort(envConfig.getPort());
             config.setBucket(envConfig.getBucket());
             config.setLocation(envConfig.getLocation());
             config.setAccessKey(envConfig.getAccessKey());
@@ -71,7 +67,6 @@ public class S3ConnectCLI implements Runnable {
         }
 
         if (host != null) config.setHost(host);
-        if (port != null) config.setPort(port);
         if (bucket != null) config.setBucket(bucket);
         if (location != null) config.setLocation(location);
         if (accessKey != null) config.setAccessKey(accessKey);
