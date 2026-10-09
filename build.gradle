@@ -9,11 +9,11 @@ java {
     }
 }
 
-group = 'com.s3connect'
+group = 'io.github.swldmnn.s3connect'
 version = '1.0.0'
 
 application {
-    mainClass = 'com.s3connect.Main'
+    mainClass = 'io.github.swldmnn.s3connect.Main'
 }
 
 repositories {

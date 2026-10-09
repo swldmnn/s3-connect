@@ -1,4 +1,4 @@
-package com.s3connect.config;
+package io.github.swldmnn.s3connect.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;

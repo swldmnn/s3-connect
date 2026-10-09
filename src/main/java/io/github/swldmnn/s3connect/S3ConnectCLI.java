@@ -1,12 +1,12 @@
-package com.s3connect;
+package io.github.swldmnn.s3connect;
 
 import picocli.CommandLine;
-import com.s3connect.commands.ListCommand;
-import com.s3connect.commands.MultipartUploadCommand;
-import com.s3connect.commands.DeleteCommand;
-import com.s3connect.commands.DownloadCommand;
-import com.s3connect.config.ConfigLoader;
-import com.s3connect.config.ConfigLoader.EnvironmentConfig;
+import io.github.swldmnn.s3connect.commands.ListCommand;
+import io.github.swldmnn.s3connect.commands.MultipartUploadCommand;
+import io.github.swldmnn.s3connect.commands.DeleteCommand;
+import io.github.swldmnn.s3connect.commands.DownloadCommand;
+import io.github.swldmnn.s3connect.config.ConfigLoader;
+import io.github.swldmnn.s3connect.config.ConfigLoader.EnvironmentConfig;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.Logger;

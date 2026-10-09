@@ -1,9 +1,9 @@
-package com.s3connect.commands;
+package io.github.swldmnn.s3connect.commands;
 
 import picocli.CommandLine;
-import com.s3connect.S3ConnectCLI;
-import com.s3connect.config.ConfigLoader.EnvironmentConfig;
-import com.s3connect.util.S3ClientFactory;
+import io.github.swldmnn.s3connect.S3ConnectCLI;
+import io.github.swldmnn.s3connect.config.ConfigLoader.EnvironmentConfig;
+import io.github.swldmnn.s3connect.util.S3ClientFactory;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadRequest;
 import software.amazon.awssdk.services.s3.model.CompletedMultipartUpload;

@@ -1,6 +1,6 @@
-package com.s3connect.util;
+package io.github.swldmnn.s3connect.util;
 
-import com.s3connect.config.ConfigLoader.EnvironmentConfig;
+import io.github.swldmnn.s3connect.config.ConfigLoader.EnvironmentConfig;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.http.SdkHttpClient;
